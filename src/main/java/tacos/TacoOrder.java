@@ -2,7 +2,9 @@ package tacos;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.validation.constraints.Digits;
@@ -12,34 +14,41 @@ import javax.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.CreditCardNumber;
 
 @Data
-public class TacoOrder {
-	@NotBlank(message = "Delivery name is required")
-	private String deliveryName;
+public class TacoOrder implements Serializable {
 
-	@NotBlank(message = "Street is required")
-	private String deliveryStreet;
+    private static final long serialVersionUID = 1L;
 
-	@NotBlank(message = "City is required")
-	private String deliveryCity;
+    private long id;
 
-	@NotBlank(message = "State is required")
-	private String deliveryState;
+    private Date placedAt;
 
-	@NotBlank(message = "Zip code is required")
-	private String deliveryZip;
+    @NotBlank(message = "Delivery name is required")
+    private String deliveryName;
 
-	@CreditCardNumber(message = "Not a valid credit card number")
-	private String ccNumber;
+    @NotBlank(message = "Street is required")
+    private String deliveryStreet;
 
-	@Pattern(regexp = "^(0[1-9]|1[0-2])([\\/])([2-9][0-9])$", message = "Must be formatted MM/YY")
-	private String ccExpiration;
+    @NotBlank(message = "City is required")
+    private String deliveryCity;
 
-	@Digits(integer = 3, fraction = 0, message = "Invalid CVV")
-	private String ccCVV;
+    @NotBlank(message = "State is required")
+    private String deliveryState;
 
-	private List<Taco> tacos = new ArrayList<>();
+    @NotBlank(message = "Zip code is required")
+    private String deliveryZip;
 
-	public void addTaco(Taco taco) {
-		this.tacos.add(taco);
-	}
+    @CreditCardNumber(message = "Not a valid credit card number")
+    private String ccNumber;
+
+    @Pattern(regexp = "^(0[1-9]|1[0-2])([\\/])([2-9][0-9])$", message = "Must be formatted MM/YY")
+    private String ccExpiration;
+
+    @Digits(integer = 3, fraction = 0, message = "Invalid CVV")
+    private String ccCVV;
+
+    private List<Taco> tacos = new ArrayList<>();
+
+    public void addTaco(Taco taco) {
+        this.tacos.add(taco);
+    }
 }
