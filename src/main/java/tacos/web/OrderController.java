@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
+import tacos.data.OrderRepository;
 
 @Slf4j
 @Controller
@@ -19,21 +20,27 @@ import org.springframework.web.bind.support.SessionStatus;
 @SessionAttributes("tacoOrder")
 public class OrderController {
 
-	@GetMapping("/current")
-	public String orderForm() {
-		return "orderForm";
-	}
+    private OrderRepository orderRepo;
 
-	@PostMapping
-	public String processOrder(@Valid TacoOrder order, Errors errors, SessionStatus sessionStatus) {
+    public OrderController(OrderRepository orderRepo) {
+        this.orderRepo = orderRepo;
+    }
 
-		if (errors.hasErrors()) {
-			return "orderForm";
-		}
+    @GetMapping("/current")
+    public String orderForm() {
+        return "orderForm";
+    }
 
-		log.info("Order submittet: {}", order);
-		sessionStatus.setComplete();
+    @PostMapping
+    public String processOrder(@Valid TacoOrder order, Errors errors, SessionStatus sessionStatus) {
 
-		return "redirect:/";
-	}
+        if (errors.hasErrors()) {
+            return "orderForm";
+        }
+
+        orderRepo.save(order);
+        sessionStatus.setComplete();
+
+        return "redirect:/";
+    }
 }
